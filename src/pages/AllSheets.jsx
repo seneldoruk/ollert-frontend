@@ -1,16 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavbarAll from "../components/NavbarAll";
+import EditAccessModal from "../components/EditAccessModal";
 export default function AllSheets() {
   const axios = require("axios").default;
   const [tables, setTables] = useState();
+  const [showModal, setShowModal] = useState(false);
+  const [clickedSheet, setClickedSheet] = useState();
   useEffect(() => {
     updateTables();
   }, []);
 
+  function openModal(e) {
+    setClickedSheet(e.target.value);
+    setShowModal(true);
+  }
+
   return (
     <div>
       <NavbarAll updateData={updateTables} />
+      {showModal && (
+        <EditAccessModal
+          closeModal={() => setShowModal(false)}
+          sheetid={clickedSheet}
+        />
+      )}
       <div className="m-5 d-flex flex-row flex-wrap">
         {tables &&
           tables.map((table) => {
@@ -34,6 +48,13 @@ export default function AllSheets() {
                     onClick={deleteTable}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="btn btn-secondary m-1"
+                    value={table.id}
+                    onClick={(e) => openModal(e)}
+                  >
+                    Change Users
                   </button>
                 </div>
               </div>
