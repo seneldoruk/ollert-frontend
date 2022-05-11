@@ -27,5 +27,6 @@ axios.interceptors.response.use(
     } else if (error.response.status === 403) {
       window.location.assign("/");
     }
+    return Promise.reject(error);
   }
 );
